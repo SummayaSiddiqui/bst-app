@@ -18,6 +18,8 @@ public class App {
         // Test JSON serialization
         System.out.println("Tree structure (JSON):\n" + bst.toJson());
 
-
+        // Test balancing (bonus)
+        bst.balance();
+        System.out.println("Balanced tree (JSON):\n" + bst.toJson());
     }
 }

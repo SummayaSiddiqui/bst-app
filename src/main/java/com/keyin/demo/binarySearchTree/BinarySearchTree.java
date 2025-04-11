@@ -82,5 +82,20 @@ public class BinarySearchTree {
         map.put("right", toJsonRec(node.right));
         return map;
     }
+
+    // Balancing of the tree
+    public void balance() {
+        List<Integer> sorted = inorderTraversal();
+        root = buildBalancedTree(sorted, 0, sorted.size() - 1);
+    }
+
+    private TreeNode buildBalancedTree(List<Integer> values, int start, int end) {
+        if (start > end) return null;
+        int mid = (start + end) / 2;
+        TreeNode node = new TreeNode(values.get(mid));
+        node.left = buildBalancedTree(values, start, mid - 1);
+        node.right = buildBalancedTree(values, mid + 1, end);
+        return node;
+    }
 }
 
