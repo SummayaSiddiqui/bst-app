@@ -1,5 +1,6 @@
 package com.keyin.demo.binarySearchTree;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -18,6 +19,18 @@ public class TreeRecord {
 
     @Column(name = "custom_tree_structure", length = 2000)
     private String treeStructure;
+
+    @Column(name = "is_balanced", columnDefinition = "BOOLEAN")
+    @JsonProperty("isBalanced")
+    private Boolean balanced;
+
+    public boolean isBalanced() {
+        return balanced;
+    }
+
+    public void setBalanced(boolean balanced) {
+        this.balanced = balanced;
+    }
 
     public Long getId() {
         return id;

@@ -28,6 +28,7 @@ public class TreeRecordController {
         TreeRecord treeRecord = new TreeRecord();
         treeRecord.setInputNumbers(numbers.toString());
         treeRecord.setTreeStructure(binarySearchTreeJson.toJson());
+        treeRecord.setBalanced(false);
         treeRecordRepository.save(treeRecord);
 
         return binarySearchTreeJson.toJsonWithRoot();
@@ -39,7 +40,6 @@ public class TreeRecordController {
         List<Integer> numbers = request.get("numbers");
         BinarySearchTree binarySearchTreeJson = new BinarySearchTree();
 
-        // Insert numbers
         for (Integer num : numbers) {
             binarySearchTreeJson.insert(num);
         }
@@ -49,13 +49,13 @@ public class TreeRecordController {
         TreeRecord treeRecord = new TreeRecord();
         treeRecord.setInputNumbers(numbers.toString());
         treeRecord.setTreeStructure(binarySearchTreeJson.toJson());
+        treeRecord.setBalanced(true);
         treeRecordRepository.save(treeRecord);
 
         return binarySearchTreeJson.toJsonWithRoot();
     }
 
-
-    @GetMapping("/history")  // Unique sub-path
+    @GetMapping("/history")
     public List<TreeRecord> getPreviousTrees() {
         treeRecordRepository.findAll();
         return treeRecordRepository.findAll();
