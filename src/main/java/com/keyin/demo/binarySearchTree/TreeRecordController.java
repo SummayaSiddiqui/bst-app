@@ -29,6 +29,6 @@ public class TreeRecordController {
         treeRecord.setTreeStructure(binarySearchTreeJson.toJson());
         treeRecordRepository.save(treeRecord);
 
-        return binarySearchTreeJson.toJsonRec(binarySearchTreeJson.getRoot());
+        return binarySearchTreeJson.toJsonWithRoot();
     }
 }
