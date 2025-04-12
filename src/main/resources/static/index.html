@@ -24,6 +24,12 @@
 
         <pre id="output"></pre>
     </div>
+
+    <section id="previous-trees">
+        <h3>Previous Trees</h3>
+        <p>View previously generated trees.</p>
+        <div id="previous-tree-list"></div>
+    </section>
 </main>
 
 <footer>
@@ -54,6 +60,36 @@
         .catch(err => {
             console.error("Error:", err);
             document.getElementById("output").textContent = "Error occurred while processing.";
+        });
+    }
+
+    function viewPrevious() {
+    fetch("/api/tree/previous-trees")
+        .then(res => res.json())
+        .then(data => {
+            const container = document.getElementById("previous-tree-list");
+            container.innerHTML = "";
+
+            if (data.length === 0) {
+                container.textContent = "No previous trees found.";
+                container.style.color = "red";
+                return;
+            }
+
+            container.style.color = "";
+            const ul = document.createElement("ul");
+            data.forEach(record => {
+                const li = document.createElement("li");
+                li.innerHTML = `<strong>Input:</strong> ${record.inputNumbers}<br><strong>Tree:</strong> ${record.treeStructure}`;
+                ul.appendChild(li);
+            });
+            container.appendChild(ul);
+        })
+        .catch(err => {
+            console.error("Error loading previous trees:", err);
+            const container = document.getElementById("previous-tree-list");
+            container.textContent = "Error loading previous trees.";
+            container.style.color = "red";
         });
     }
 </script>

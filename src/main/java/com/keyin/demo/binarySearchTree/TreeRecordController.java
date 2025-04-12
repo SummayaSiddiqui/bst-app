@@ -31,4 +31,10 @@ public class TreeRecordController {
 
         return binarySearchTreeJson.toJsonWithRoot();
     }
+
+    @GetMapping("/previous-trees")
+    @ResponseBody
+    public List<TreeRecord> getPreviousTrees() {
+        return treeRecordRepository.findAll();
+    }
 }
