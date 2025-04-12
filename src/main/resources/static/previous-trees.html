@@ -10,6 +10,7 @@
 <header>
     <h1>Previous Binary Search Trees</h1>
     <button onclick="window.location.href='/enter-numbers'" class="nav-button">Back to Home</button>
+    <button onclick="window.location.href='/balanced-tree'" class="nav-button">To View Balanced Binary Search Tree Click Here</button>
 </header>
 
 <main>
@@ -32,7 +33,6 @@
     fetch('/api/tree/history')
         .then(response => response.json())
         .then(data => {
-            // Add this check
             if (!Array.isArray(data)) {
                 console.error("API response is not an array:", data);
                 return;
@@ -46,12 +46,16 @@
                 return;
             }
 
-            data.forEach(tree => {  // Now safe to use forEach
+            data.forEach(tree => {
                 const treeCard = document.createElement('div');
                 treeCard.className = 'tree-container';
 
+                const balanceStatus = tree.isBalanced ?
+                    '<span style="color:green">(Balanced)</span>' :
+                    '<span style="color:red">(Unbalanced)</span>';
+
                 treeCard.innerHTML = `
-                    <h3>Input: ${tree.inputNumbers}</h3>
+                    <h3>Input: ${tree.inputNumbers} ${balanceStatus}</h3>
                     <canvas class="tree-canvas"
                             data-tree="${tree.treeStructure}"></canvas>
                 `;
@@ -68,7 +72,6 @@
     const canvases = document.querySelectorAll('.tree-canvas');
     canvases.forEach(canvas => {
         try {
-            // Unescape HTML entities then parse
             const escapedJson = canvas.dataset.tree;
             const cleanJson = escapedJson
                 .replace(/&quot;/g, '"')
