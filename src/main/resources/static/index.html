@@ -18,18 +18,12 @@
             <input type="text" id="numbers" placeholder="e.g. 2,4,1,3,5">
             <div class="button-group">
                 <button onclick="submitNumbers()">Submit</button>
-                <button onclick="viewPrevious()">Show Previous</button>
+                <button onclick="window.location.href='/previous-trees'">Show Previous</button>
             </div>
         </div>
 
         <pre id="output"></pre>
     </div>
-
-    <section id="previous-trees">
-        <h3>Previous Trees</h3>
-        <p>View previously generated trees.</p>
-        <div id="previous-tree-list"></div>
-    </section>
 </main>
 
 <footer>
@@ -64,7 +58,7 @@
     }
 
     function viewPrevious() {
-    fetch("/api/tree/previous-trees")
+    fetch("/api/tree/history")
         .then(res => res.json())
         .then(data => {
             const container = document.getElementById("previous-tree-list");

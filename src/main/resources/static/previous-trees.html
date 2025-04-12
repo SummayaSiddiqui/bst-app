@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Previous Binary Search Trees</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<header>
+    <h1>Previous Binary Search Trees</h1>
+    <button onclick="window.location.href='/enter-numbers'" class="nav-button">Back to Input</button>
+</header>
+
+<main>
+    <section id="previous-trees">
+        <h2>Generated Trees</h2>
+        <div id="previous-tree-list">
+            <p>Loading previous trees...</p>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Binary Search Tree Visualization App</p>
+</footer>
+
+</body>
+</html>
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    fetch('/api/tree/history')
+        .then(response => response.json())
+        .then(data => {
+            // Add this check
+            if (!Array.isArray(data)) {
+                console.error("API response is not an array:", data);
+                return;
+            }
+
+            const container = document.getElementById('previous-tree-list');
+            container.innerHTML = '';
+
+            if (data.length === 0) {
+                container.innerHTML = '<p>No trees generated yet</p>';
+                return;
+            }
+
+            data.forEach(tree => {  // Now safe to use forEach
+                const treeCard = document.createElement('div');
+                treeCard.className = 'tree-container';
+
+                treeCard.innerHTML = `
+                    <h3>Input: ${tree.inputNumbers}</h3>
+                    <canvas class="tree-canvas"
+                            data-tree="${tree.treeStructure}"></canvas>
+                `;
+                container.appendChild(treeCard);
+            });
+
+            setTimeout(initializeTreeCanvases, 50);
+        })
+        .catch(console.error);
+    });
+
+
+    function initializeTreeCanvases() {
+    const canvases = document.querySelectorAll('.tree-canvas');
+    canvases.forEach(canvas => {
+        try {
+            // Unescape HTML entities then parse
+            const escapedJson = canvas.dataset.tree;
+            const cleanJson = escapedJson
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&');
+
+            const treeData = JSON.parse(cleanJson);
+            drawBinaryTree(canvas, treeData);
+        } catch (e) {
+            console.error("Invalid tree data:", canvas.dataset.tree, e);
+            canvas.parentElement.innerHTML +=
+                `<p style="color:red">Invalid tree structure</p>`;
+        }
+       });
+    }
+
+    function drawBinaryTree(canvas, tree) {
+        const ctx = canvas.getContext('2d');
+        const nodeRadius = 20;
+        const levelHeight = 80;
+        const padding = 40;
+
+        const maxLevel = getTreeDepth(tree);
+        const maxWidth = Math.pow(2, maxLevel) * (nodeRadius * 2 + padding);
+        canvas.width = maxWidth;
+        canvas.height = maxLevel * levelHeight + padding;
+
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.font = '14px Arial';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+
+        drawNode(ctx, tree, canvas.width/2, padding, maxWidth/2);
+
+        function drawNode(ctx, node, x, y, xOffset) {
+            if (!node) return;
+
+            ctx.beginPath();
+            ctx.arc(x, y, nodeRadius, 0, Math.PI * 2);
+            ctx.stroke();
+
+            ctx.fillText(node.value, x, y);
+
+            const childY = y + levelHeight;
+            if (node.left) {
+                const leftX = x - xOffset/2;
+                ctx.beginPath();
+                ctx.moveTo(x, y + nodeRadius);
+                ctx.lineTo(leftX, childY - nodeRadius);
+                ctx.stroke();
+                drawNode(ctx, node.left, leftX, childY, xOffset/2);
+            }
+            if (node.right) {
+                const rightX = x + xOffset/2;
+                ctx.beginPath();
+                ctx.moveTo(x, y + nodeRadius);
+                ctx.lineTo(rightX, childY - nodeRadius);
+                ctx.stroke();
+                drawNode(ctx, node.right, rightX, childY, xOffset/2);
+            }
+        }
+
+        function getTreeDepth(node) {
+            if (!node) return 0;
+            return 1 + Math.max(
+                getTreeDepth(node.left),
+                getTreeDepth(node.right)
+            );
+        }
+    }
+</script>

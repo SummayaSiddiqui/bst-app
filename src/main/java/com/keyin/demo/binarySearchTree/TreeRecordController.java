@@ -3,6 +3,7 @@ package com.keyin.demo.binarySearchTree;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,9 +33,9 @@ public class TreeRecordController {
         return binarySearchTreeJson.toJsonWithRoot();
     }
 
-    @GetMapping("/previous-trees")
-    @ResponseBody
+    @GetMapping("/history")  // Unique sub-path
     public List<TreeRecord> getPreviousTrees() {
+        treeRecordRepository.findAll();
         return treeRecordRepository.findAll();
     }
 }

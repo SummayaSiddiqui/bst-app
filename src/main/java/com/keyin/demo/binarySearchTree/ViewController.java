@@ -8,6 +8,11 @@ public class ViewController {
 
     @GetMapping("/enter-numbers")
     public String showInputPage() {
-        return "forward:/index.html";  // Serve the static file
+        return "forward:/index.html";
+    }
+
+    @GetMapping("/previous-trees")
+    public String showPreviousTrees() {
+        return "forward:/previous-trees.html";
     }
 }

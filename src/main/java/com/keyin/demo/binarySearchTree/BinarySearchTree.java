@@ -61,8 +61,8 @@ public class BinarySearchTree {
 
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            return objectMapper.writerWithDefaultPrettyPrinter()
-                    .writeValueAsString(this.toJsonRec(root));
+            String json = objectMapper.writeValueAsString(this.toJsonRec(root));
+            return json.replace("\"", "&quot;");
         } catch (Exception e) {
             e.printStackTrace();
             return "{}";
