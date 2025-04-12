@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Binary Search Tree Visualization</title>
@@ -16,14 +15,13 @@
         <h2>Binary Search Tree Input</h2>
 
         <div class="input-group">
-            <input type="text" id="numbers" placeholder="e.g. 5,3,7,2">
+            <input type="text" id="numbers" placeholder="e.g. 2,4,1,3,5">
             <div class="button-group">
                 <button onclick="submitNumbers()">Submit</button>
                 <button onclick="viewPrevious()">Show Previous</button>
             </div>
         </div>
 
-        <!-- Output Section -->
         <pre id="output"></pre>
     </div>
 </main>
@@ -34,3 +32,28 @@
 
 </body>
 </html>
+
+<script>
+    function submitNumbers() {
+        const nums = document.getElementById("numbers").value
+            .split(',')
+            .map(n => parseInt(n.trim()));
+
+        fetch("/api/tree/process-numbers", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ numbers: nums })  // Send the numbers in the correct format
+        })
+        .then(res => res.json())
+        .then(data => {
+            // Display the response
+            document.getElementById("output").textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(err => {
+            console.error("Error:", err);
+            document.getElementById("output").textContent = "Error occurred while processing.";
+        });
+    }
+</script>

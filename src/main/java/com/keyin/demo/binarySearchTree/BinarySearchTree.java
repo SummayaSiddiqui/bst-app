@@ -73,7 +73,13 @@ public class BinarySearchTree {
         return toJsonRec(root);
     }
 
-    public Map<String, Object> toJsonRec(TreeNode node) {
+    public Map<String, Object> toJsonWithRoot() {
+        Map<String, Object> rootMap = new LinkedHashMap<>();
+        rootMap.put("root", toJsonRec(this.root));
+        return rootMap;
+    }
+
+    private Map<String, Object> toJsonRec(TreeNode node) {
         if (node == null) return null;
 
         Map<String, Object> map = new LinkedHashMap<>();
