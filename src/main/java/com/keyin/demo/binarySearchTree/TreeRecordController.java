@@ -33,6 +33,28 @@ public class TreeRecordController {
         return binarySearchTreeJson.toJsonWithRoot();
     }
 
+    @PostMapping("/process-numbers/balanced")
+    @ResponseBody
+    public Map<String, Object> processBalancedNumbersJson(@RequestBody Map<String, List<Integer>> request) {
+        List<Integer> numbers = request.get("numbers");
+        BinarySearchTree binarySearchTreeJson = new BinarySearchTree();
+
+        // Insert numbers
+        for (Integer num : numbers) {
+            binarySearchTreeJson.insert(num);
+        }
+
+        binarySearchTreeJson.balance();
+
+        TreeRecord treeRecord = new TreeRecord();
+        treeRecord.setInputNumbers(numbers.toString());
+        treeRecord.setTreeStructure(binarySearchTreeJson.toJson());
+        treeRecordRepository.save(treeRecord);
+
+        return binarySearchTreeJson.toJsonWithRoot();
+    }
+
+
     @GetMapping("/history")  // Unique sub-path
     public List<TreeRecord> getPreviousTrees() {
         treeRecordRepository.findAll();
