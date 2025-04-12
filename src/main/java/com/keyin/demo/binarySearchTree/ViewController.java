@@ -15,4 +15,9 @@ public class ViewController {
     public String showPreviousTrees() {
         return "forward:/previous-trees.html";
     }
+
+    @GetMapping("/balanced-tree")
+    public String showBalancedTree() {
+        return "forward:/balanced-tree.html";
+    }
 }
